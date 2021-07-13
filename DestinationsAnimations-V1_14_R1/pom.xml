@@ -27,9 +27,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.14-pre5-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.14-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--Citizens API-->
@@ -37,15 +37,6 @@
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
             <version>2.0.24-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--Destinations Reference-->
-        <dependency>
-            <groupId>net.livecar.nuttyworks.npc_destinations</groupId>
-            <artifactId>NPCDestinations</artifactId>
-            <version>2.4.0</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -58,8 +49,4 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <directory>../target</directory>
-        <finalName>${project.artifactId}-${project.parent.version}</finalName>
-    </build>
 </project>

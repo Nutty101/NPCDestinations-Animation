@@ -20,6 +20,7 @@
         <module>DestinationsAnimations-V1_16_R1</module>
         <module>DestinationsAnimations-V1_16_R2</module>
         <module>DestinationsAnimations-V1_16_R3</module>
+        <module>DestinationsAnimations-V1_17_R1</module>
         <module>DestinationsAnimations-API</module>
     </modules>
 
@@ -33,6 +34,16 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <!--    Global dependencies-->
+    <dependencies>
+        <dependency>
+            <groupId>net.livecar.nuttyworks.npc_destinations</groupId>
+            <artifactId>NPCDestinations-Plugin</artifactId>
+            <version>2.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <!-- Common Repositories -->
     <repositories>
         <repository>
@@ -44,8 +55,8 @@
             <url>http://repo.citizensnpcs.co/</url>
         </repository>
         <repository>
-            <id>nuttyrepo-release</id>
-            <url>http://repo.livecar.net/repository/maven-releases/</url>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
     </repositories>
 
@@ -55,7 +66,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.2.0</version>
             </plugin>
         </plugins>
     </build>
