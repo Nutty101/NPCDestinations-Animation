@@ -17,33 +17,33 @@ import java.util.logging.Level;
 
 public class Destinations_Plugin extends DestinationsAddon {
     Destinations_Animations pluginReference = null;
-    
+
     public Destinations_Plugin(Destinations_Animations instanceRef) {
         pluginReference = instanceRef;
     }
-    
+
     @Override
     public String getPluginIcon() {
         return "♒";
     }
-    
+
     @Override
     public String getActionName() {
         return "Animations";
     }
-    
+
     @Override
     public String getQuickDescription() {
         String[] response = pluginReference.getDestinationsPlugin.getMessageManager.buildMessage("animations", "messages.plugin_description", "");
         return response[0];
     }
-    
+
     @Override
     public String getDestinationHelp(NPC npc, NPCDestinationsTrait npcTrait, Destination_Setting location) {
         String[] response = new String[0];
-        
+
         try {
-            
+
             if (!pluginReference.npcSettings.containsKey(npc.getId())) {
                 response = pluginReference.getDestinationsPlugin.getMessageManager.buildMessage("animations", null, "messages.plugin_destination_generic", npcTrait, location, npc, null, 0);
                 return response[0];
@@ -53,7 +53,7 @@ public class Destinations_Plugin extends DestinationsAddon {
                     response = pluginReference.getDestinationsPlugin.getMessageManager.buildMessage("animations", null, "messages.plugin_destination_generic", npcTrait, location, npc, null, 0);
                     return response[0];
                 }
-                
+
                 switch (animSetting.action) {
                     case SWING:
                         response = pluginReference.getDestinationsPlugin.getMessageManager.buildMessage("animations", null, "messages.plugin_destination_swing", npcTrait, location, npc, null, 0);
@@ -76,32 +76,32 @@ public class Destinations_Plugin extends DestinationsAddon {
             return response[0];
         }
     }
-    
+
     @Override
     public List<String> parseTabItem(String item, String priorArg) {
         List<String> results = new ArrayList<String>();
-        
+
         if (item.equalsIgnoreCase("<animation>")) {
             for (enAction action : enAction.values()) {
-                results.add(String.valueOf(action.name()));
+                results.add(action.name());
             }
         }
-        
+
         if (item.equalsIgnoreCase("<sound>")) {
             for (Sound sound : Sound.values()) {
-                results.add(String.valueOf(sound.name()));
+                results.add(sound.name());
             }
         }
-        
+
         if (item.equalsIgnoreCase("<soundcategory>")) {
             for (enSoundCategory soundCat : enSoundCategory.values()) {
-                results.add(String.valueOf(soundCat.name()));
+                results.add(soundCat.name());
             }
         }
-        
+
         return results;
     }
-    
+
     @Override
     public String parseLanguageLine(String message, NPCDestinationsTrait npcTrait, Destination_Setting locationSetting, Material blockMaterial, NPC npc, int ident) {
         if (locationSetting != null) {
@@ -135,18 +135,18 @@ public class Destinations_Plugin extends DestinationsAddon {
                 }
             }
         }
-        
+
         if (message.toLowerCase().contains("<animations.setting>"))
             message = message.replaceAll("<animations\\.setting>", "Not Set");
-        
+
         return message;
     }
-    
+
     @Override
     public void onLocationLoading(NPC npc, NPCDestinationsTrait npcTrait, Destination_Setting location, DataKey storageKey) {
         if (!storageKey.keyExists("Animations"))
             return;
-        
+
         Animations_Settings npcAnimation;
         if (!pluginReference.npcSettings.containsKey(npc.getId())) {
             npcAnimation = new Animations_Settings();
@@ -155,24 +155,23 @@ public class Destinations_Plugin extends DestinationsAddon {
         } else {
             npcAnimation = pluginReference.npcSettings.get(npc.getId());
         }
-        
-        if (npcAnimation.locations.containsKey(location.LocationIdent))
-            npcAnimation.locations.remove(location.LocationIdent);
-        
+
+        npcAnimation.locations.remove(location.LocationIdent);
+
         Animations_Location locSetting = new Animations_Location();
-        
+
         if (enAction.valueOf(storageKey.getString("Animations.Setting", "")) != null)
             locSetting.action = enAction.valueOf(storageKey.getString("Animations.Setting", "NONE"));
-        
+
         // Remove after a couple versions.
         if (!storageKey.getString("Animations.Variable1", "").equals("")) {
             locSetting.interval = Integer.parseInt(storageKey.getString("Animations.Variable1", ""));
         }
-        
+
         if (!storageKey.getString("Animations.Interval", "").equals("")) {
             locSetting.interval = Integer.parseInt(storageKey.getString("Animations.Interval", ""));
         }
-        
+
         if (!storageKey.getString("Animations.Sound", "").equals("")) {
             String soundStr = storageKey.getString("Animations.Sound", "");
             for (Sound snd : Sound.values()) {
@@ -181,7 +180,7 @@ public class Destinations_Plugin extends DestinationsAddon {
                 }
             }
         }
-        
+
         if (!storageKey.getString("Animations.Category", "").equals("")) {
             String soundStr = storageKey.getString("Animations.Category", "");
             for (enSoundCategory sndCat : enSoundCategory.values()) {
@@ -190,25 +189,25 @@ public class Destinations_Plugin extends DestinationsAddon {
                 }
             }
         }
-        
+
         if (!storageKey.getString("Animations.Volume", "").equals("")) {
             locSetting.volume = Float.parseFloat(storageKey.getString("Animations.Volume", "1.0"));
         }
-        
+
         if (!storageKey.getString("Animations.Pitch", "").equals("")) {
             locSetting.pitch = Float.parseFloat(storageKey.getString("Animations.pitch", "0.0"));
         }
-        
+
         npcAnimation.locations.put(location.LocationIdent, locSetting);
     }
-    
+
     @Override
     public void onLocationSaving(NPC npc, NPCDestinationsTrait npcTrait, Destination_Setting location, DataKey storageKey) {
         if (!pluginReference.npcSettings.containsKey(npc.getId()))
             return;
         if (!pluginReference.npcSettings.get(npc.getId()).locations.containsKey(location.LocationIdent))
             return;
-        
+
         if (pluginReference.npcSettings.get(npc.getId()).locations.containsKey(location.LocationIdent)) {
             storageKey.setString("Animations.Setting", pluginReference.npcSettings.get(npc.getId()).locations.get(location.LocationIdent).action.toString());
             storageKey.setInt("Animations.Interval", pluginReference.npcSettings.get(npc.getId()).locations.get(location.LocationIdent).interval);
@@ -220,7 +219,7 @@ public class Destinations_Plugin extends DestinationsAddon {
                 storageKey.setString("Animations.Category", pluginReference.npcSettings.get(npc.getId()).locations.get(location.LocationIdent).soundCategory.toString());
         }
     }
-    
+
     @Override
     public boolean onNavigationReached(NPC npc, NPCDestinationsTrait trait, Destination_Setting destination) {
         if (pluginReference.npcSettings.containsKey(npc.getId())) {
@@ -249,7 +248,7 @@ public class Destinations_Plugin extends DestinationsAddon {
                             pluginReference.monitoredNPC.put(npc.getId(), destination.LocationIdent);
                             break;
                         case NONE:
-                        
+
                         default:
                             break;
                     }
@@ -258,7 +257,7 @@ public class Destinations_Plugin extends DestinationsAddon {
         }
         return false;
     }
-    
+
     @Override
     public boolean onNewDestination(NPC npc, NPCDestinationsTrait trait, Destination_Setting destination) {
         if (pluginReference.npcSettings.containsKey(npc.getId())) {
@@ -267,9 +266,9 @@ public class Destinations_Plugin extends DestinationsAddon {
                     pluginReference.npcSettings.get(Integer.valueOf(npc.getId())).fishHook.remove();
                     pluginReference.npcSettings.get(Integer.valueOf(npc.getId())).fishHook = null;
                 }
-                
+
                 pluginReference.getProcessingClass.undoAnimations(npc);
-                
+
                 if (pluginReference.monitoredNPC.containsKey(Integer.valueOf(npc.getId()))) {
                     pluginReference.getDestinationsPlugin.getMessageManager.debugMessage(Level.INFO, "Animations_Plugin.onNavigationNewDestination|NPC:" + npc.getId() + "|New Location,clearing monitors and releasing control.");
                     trait.unsetMonitoringPlugin();
@@ -279,14 +278,14 @@ public class Destinations_Plugin extends DestinationsAddon {
         }
         return false;
     }
-    
+
     @Override
     public void onEnableChanged(NPC npc, NPCDestinationsTrait trait, boolean enabled) {
         if (enabled) {
             if (pluginReference.npcSettings.containsKey(npc.getId())) {
                 if (pluginReference.npcSettings.get(npc.getId()).locations.containsKey(trait.currentLocation.LocationIdent)) {
                     if (!pluginReference.monitoredNPC.containsKey(npc.getId())) {
-                        
+
                         pluginReference.getDestinationsPlugin.getMessageManager.debugMessage(Level.INFO, "Animations_Plugin.onNavigationReached|NPC:" + npc.getId() + "|Monitored location reached, assigning as monitor");
                         switch (pluginReference.npcSettings.get(npc.getId()).locations.get(trait.currentLocation.LocationIdent).action) {
                             case NONE:
@@ -305,7 +304,6 @@ public class Destinations_Plugin extends DestinationsAddon {
                             default:
                                 break;
                         }
-                        return;
                     }
                 }
             }

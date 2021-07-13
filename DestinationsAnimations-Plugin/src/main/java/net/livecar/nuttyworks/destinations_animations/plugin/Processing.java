@@ -2,7 +2,6 @@ package net.livecar.nuttyworks.destinations_animations.plugin;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Inventory;
-import net.citizensnpcs.util.PlayerAnimation;
 import net.livecar.nuttyworks.destinations_animations.Destinations_Animations;
 import net.livecar.nuttyworks.destinations_animations.storage.Sitting_NPC;
 import net.livecar.nuttyworks.destinations_animations.storage.SleepPacket_Settings;
@@ -16,7 +15,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;

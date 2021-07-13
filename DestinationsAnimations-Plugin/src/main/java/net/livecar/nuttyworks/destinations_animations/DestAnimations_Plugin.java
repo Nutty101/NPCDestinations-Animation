@@ -14,16 +14,16 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 
 public class DestAnimations_Plugin extends org.bukkit.plugin.java.JavaPlugin implements org.bukkit.event.Listener {
-    
+
     public void onDisable() {
         if (Destinations_Animations.Instance != null && Destinations_Animations.Instance.getDestinationsPlugin != null) {
             Destinations_Animations.Instance.getDestinationsPlugin.getMessageManager.debugMessage(Level.CONFIG, "nuDestinationAnimations.onDisable()|Stopping Internal Processes");
-            
+
             //Clean up sitting NPCs
             Destinations_Animations.Instance.getProcessingClass.CleanupAnimations();
         }
     }
-    
+
     public void onEnable() {
         if (Bukkit.getServer().getPluginManager().getPlugin("NPC_Destinations") == null) {
             Bukkit.getLogger().log(java.util.logging.Level.INFO, "[" + getDescription().getName() + "] " + "NPCDestinations2 not found, not registering as plugin");
@@ -44,21 +44,21 @@ public class DestAnimations_Plugin extends org.bukkit.plugin.java.JavaPlugin imp
             Destinations_Animations.Instance.getDestinationsPlugin = DestinationsPlugin.Instance;
             // Setup the default paths in the storage folder.
             Destinations_Animations.Instance.languagePath = new File(DestinationsPlugin.Instance.getDataFolder(), "/Languages/");
-            
+
             // Generate the default folders and files.
             Destinations_Animations.Instance.getDefaultConfigs();
-            
+
             // Force destinations to refresh its language files.
             Destinations_Animations.Instance.getDestinationsPlugin.getLanguageManager.loadLanguages(true);
         }
-        
+
         // Global references
         Destinations_Animations.Instance.getCitizensPlugin = DestinationsPlugin.Instance.getCitizensPlugin;
-        
-        
+
+
         // Register events
         Bukkit.getPluginManager().registerEvents(this, this);
-        
+
         // What version of NMS are we
         if (getServer().getClass().getPackage().getName().endsWith("v1_8_R3")) {
             Destinations_Animations.Instance.getNMSBridge = new VersionBridge_1_8_R3();
@@ -91,29 +91,26 @@ public class DestAnimations_Plugin extends org.bukkit.plugin.java.JavaPlugin imp
             return;
         }
     }
-    
+
     @EventHandler
     public void CitizensLoaded(final CitizensEnableEvent event) {
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Loop monitored and processing the fishing
-                    Destinations_Animations.Instance.getProcessingClass.onPluginTick();
-                } catch (Exception e) {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw);
-                    e.printStackTrace(pw);
-                    sw.toString(); // stack trace as a string
-                    if (Destinations_Animations.Instance.getDestinationsPlugin != null)
-                        Destinations_Animations.Instance.getDestinationsPlugin.getMessageManager.logToConsole(Destinations_Animations.Instance.getPluginReference, "Error:" + sw);
-                    else
-                        Destinations_Animations.Instance.logToConsole("Error on Animationtick: " + sw);
-                }
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            try {
+                // Loop monitored and processing the fishing
+                Destinations_Animations.Instance.getProcessingClass.onPluginTick();
+            } catch (Exception e) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                sw.toString(); // stack trace as a string
+                if (Destinations_Animations.Instance.getDestinationsPlugin != null)
+                    Destinations_Animations.Instance.getDestinationsPlugin.getMessageManager.logToConsole(Destinations_Animations.Instance.getPluginReference, "Error:" + sw);
+                else
+                    Destinations_Animations.Instance.logToConsole("Error on Animationtick: " + sw);
             }
         }, 1L, 5L);
     }
-    
+
     @EventHandler
     public void CitizensDisabled(final CitizensDisableEvent event) {
         Bukkit.getServer().getScheduler().cancelTasks(this);
@@ -124,10 +121,10 @@ public class DestAnimations_Plugin extends org.bukkit.plugin.java.JavaPlugin imp
         }
         Destinations_Animations.Instance = null;
     }
-    
+
     @EventHandler
     public void npcDespawned(final NPCDespawnEvent event) {
         Destinations_Animations.Instance.getProcessingClass.undoAnimations(event.getNPC());
     }
-    
+
 }

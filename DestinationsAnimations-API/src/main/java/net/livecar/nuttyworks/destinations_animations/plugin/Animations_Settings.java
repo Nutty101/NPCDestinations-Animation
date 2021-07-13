@@ -8,44 +8,44 @@ import org.bukkit.entity.FishHook;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Animations_Settings {
-    
+
     public int npcID;
-    public HashMap<UUID, Animations_Location> locations;
+    public Map<UUID, Animations_Location> locations;
     public Location currentDestination;
     public NPCDestinationsTrait destinationsTrait;
     public Date lastAction;
     public Date nextAnimationTime;
-    
+
     public FishHook fishHook;
     public boolean isSleeping;
     public Date castTime;
     public Location hookDestination;
-    
+
     public Animations_Settings() {
-        locations = new HashMap<UUID, Animations_Location>();
+        locations = new HashMap<>();
         lastAction = new Date();
         nextAnimationTime = new Date();
     }
-    
-    public void setNPC(Integer npcid) {
-        this.npcID = npcid;
-        NPC npc = CitizensAPI.getNPCRegistry().getById(npcid);
+
+    public void setNPC(Integer npcId) {
+        this.npcID = npcId;
+        NPC npc = CitizensAPI.getNPCRegistry().getById(npcId);
         destinationsTrait = npc.getTrait(NPCDestinationsTrait.class);
-        locations = new HashMap<UUID, Animations_Location>();
+        locations = new HashMap<>();
     }
-    
+
     public Integer getNPCID() {
         return npcID;
     }
-    
+
     public enum enAction {
         NONE, SLEEP, CHEST, CHEST_FILL, CHEST_EMPTY, FISH_ADD, FISH, SIT, SWING, COMPOST, ARMSBOUNCE;
-        
-        public enAction GetValue(String value)
-        {
+
+        public enAction GetValue(String value) {
             for (enAction enumVal : enAction.values()) {
                 if (enumVal.name().equals(value)) {
                     return enumVal;
